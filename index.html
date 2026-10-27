@@ -4,66 +4,79 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#ff6a00">
-  <title>Appliance Parts Lookup</title>
+  <title>Appliance Parts Directory</title>
   <style>
     :root{--orange:#ff6a00;--orange-dark:#df5600;--ink:#171717;--muted:#707070;--line:#dedede;--bg:#f3f3f3;--white:#fff}
     *{box-sizing:border-box}body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
     header{height:62px;background:var(--ink);color:#fff;display:flex;align-items:center;padding:0 max(18px,calc((100vw - 760px)/2));font-size:15px;font-weight:850;letter-spacing:.02em}
     .hazard{height:8px;background:repeating-linear-gradient(135deg,var(--orange) 0 14px,#171717 14px 28px)}
-    main{max-width:600px;margin:0 auto;padding:clamp(42px,12vh,100px) 20px 48px}
-    .eyebrow{font-size:11px;font-weight:850;letter-spacing:.14em;text-transform:uppercase;color:var(--orange-dark)}
-    h1{font-size:clamp(30px,8vw,44px);line-height:1.03;letter-spacing:-.045em;margin:9px 0 10px}
-    .sub{color:var(--muted);margin:0 0 26px;font-size:15px}
+    main{max-width:600px;margin:0 auto;padding:clamp(34px,8vh,72px) 20px 48px}.eyebrow{font-size:11px;font-weight:850;letter-spacing:.14em;text-transform:uppercase;color:var(--orange-dark)}
+    h1{font-size:clamp(30px,8vw,44px);line-height:1.03;letter-spacing:-.045em;margin:9px 0 10px}.sub{color:var(--muted);margin:0 0 24px;font-size:15px}
     .panel{background:var(--white);border:1px solid var(--line);border-top:5px solid var(--orange);border-radius:14px;padding:22px;box-shadow:0 14px 35px rgba(0,0,0,.07)}
     .fields{display:grid;gap:15px}.field{display:grid;gap:7px}.field label{font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
     select,input{width:100%;min-height:52px;border:1px solid #cfcfcf;border-radius:9px;background:#fff;padding:12px 14px;color:var(--ink);font:inherit;outline:none}
-    select:focus,input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,106,0,.17)}
-    input{text-transform:uppercase}
-    button{width:100%;min-height:54px;margin-top:20px;border:0;border-radius:9px;background:var(--orange);color:#171717;font:850 15px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:.04em;text-transform:uppercase;cursor:pointer}
-    button:hover{background:#ff7a1a}button:active{transform:translateY(1px)}
-    .help{font-size:12px;color:var(--muted);margin:13px 2px 0}
-    @media(max-width:480px){header{height:56px;padding:0 17px}.panel{padding:18px}.sub{font-size:14px}}
+    select:focus,input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,106,0,.17)}input{text-transform:uppercase}
+    button,.button-link{display:flex;width:100%;min-height:52px;align-items:center;justify-content:center;margin-top:16px;border:0;border-radius:9px;background:var(--orange);color:#171717;text-decoration:none;font:850 14px/1.2 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:.035em;text-transform:uppercase;cursor:pointer}
+    button:hover,.button-link:hover{background:#ff7a1a}button:active{transform:translateY(1px)}.secondary{background:#fff;border:1px solid #cfcfcf;margin-top:10px}.secondary:hover{background:#f5f5f5}
+    .help{font-size:12px;color:var(--muted);margin:12px 2px 0}.results{margin-top:22px}.results[hidden]{display:none}.results-head{margin:0 0 12px}.results-head h2{font-size:19px;line-height:1.2;margin:0 0 3px}.results-head p{font-size:13px;color:var(--muted);margin:0}
+    .part-list{display:grid;gap:8px}.part-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:54px;padding:10px 12px;background:#fff;border:1px solid var(--line);border-radius:9px}.part-name{font-weight:700}.part-row a{flex:none;color:#a64100;font-size:12px;font-weight:800;text-decoration:none}.part-row a:hover{text-decoration:underline}
+    .notice{margin:13px 2px 0;color:var(--muted);font-size:12px}.empty{padding:15px;background:#fff;border:1px dashed #bdbdbd;border-radius:9px;color:var(--muted);font-size:14px}
+    @media(max-width:480px){header{height:56px;padding:0 17px}.panel{padding:18px}.sub{font-size:14px}.part-row{min-height:50px}}
   </style>
 </head>
 <body>
   <header>HEDLUND APPLIANCE SERVICE</header>
   <div class="hazard" aria-hidden="true"></div>
   <main>
-    <div class="eyebrow">Field parts lookup</div>
-    <h1>Find the right part.</h1>
-    <p class="sub">Choose the appliance and brand, then enter the model number.</p>
+    <div class="eyebrow">Field parts directory</div>
+    <h1>Find a part name.</h1>
+    <p class="sub">Choose the appliance and brand, then enter the model number to open an alphabetical part directory.</p>
     <form class="panel" id="lookupForm">
       <div class="fields">
-        <div class="field">
-          <label for="appliance">Appliance type</label>
-          <select id="appliance" required>
-            <option value="" selected disabled>Select appliance</option>
-            <option>Washer</option><option>Dryer</option><option>Oven / Range</option><option>Refrigerator</option><option>Dishwasher</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="brand">Brand</label>
-          <select id="brand" required>
-            <option value="" selected disabled>Select brand</option>
-            <option>Amana</option><option>Bosch</option><option>Electrolux</option><option>Frigidaire</option><option>GE</option><option>Hotpoint</option><option>JennAir</option><option>KitchenAid</option><option>LG</option><option>Maytag</option><option>Miele</option><option>Samsung</option><option>Thermador</option><option>Whirlpool</option><option>Wolf</option><option>Other</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="model">Model number</label>
-          <input id="model" type="text" placeholder="Enter exact model number" autocomplete="off" autocapitalize="characters" required>
-        </div>
+        <div class="field"><label for="appliance">Appliance type</label><select id="appliance" required><option value="" selected disabled>Select appliance</option><option>Washer</option><option>Dryer</option><option>Oven / Range</option><option>Refrigerator</option><option>Dishwasher</option></select></div>
+        <div class="field"><label for="brand">Brand</label><select id="brand" required><option value="" selected disabled>Select brand</option><option>Amana</option><option>Bosch</option><option>Electrolux</option><option>Frigidaire</option><option>GE</option><option>Hotpoint</option><option>JennAir</option><option>KitchenAid</option><option>LG</option><option>Maytag</option><option>Miele</option><option>Samsung</option><option>Thermador</option><option>Whirlpool</option><option>Wolf</option><option>Other</option></select></div>
+        <div class="field"><label for="model">Model number</label><input id="model" type="text" placeholder="Enter exact model number" autocomplete="off" autocapitalize="characters" required></div>
       </div>
-      <button type="submit">Search Sears PartsDirect&nbsp; ↗</button>
-      <p class="help">Opens Sears model results. Select the exact model to view its parts list.</p>
+      <button type="submit">Show alphabetical part list</button>
+      <p class="help">Tap a part name to search it with your model on Sears PartsDirect.</p>
     </form>
+    <section class="results" id="results" aria-live="polite" hidden>
+      <div class="results-head"><h2 id="resultTitle">Parts</h2><p>Part names A–Z</p></div>
+      <div class="part-list" id="partList"></div>
+      <p class="notice">This is a general part-name directory for the appliance type. Confirm model fit and the current part number on the Sears results page.</p>
+      <a class="button-link secondary" id="openModel" target="_blank" rel="noopener">Open Sears model search ↗</a>
+    </section>
   </main>
   <script>
-    document.getElementById('lookupForm').addEventListener('submit', event => {
+    const directories={
+      "Washer":["Agitator","Basket","Bearing","Clutch","Control board","Door boot / gasket","Door latch / lock","Drain hose","Drain pump","Drive belt","Gearcase / transmission","Inlet valve","Lid switch","Motor","Pressure switch","Shock absorber","Spin basket","Suspension rod","Timer","Tub","Tub seal","Water level switch"],
+      "Dryer":["Blower wheel","Control board","Door switch","Drum","Drum bearing","Drum belt","Drum roller","Exhaust duct","Flame sensor","Gas valve coil","Heating element","Idler pulley","Igniter","Motor","Start switch","Thermal fuse","Thermistor","Thermostat","Timer","Vent assembly"],
+      "Oven / Range":["Bake element","Broil element","Burner","Control board","Door gasket","Door hinge","Door lock","Gas igniter","Knob","Oven sensor","Relay board","Spark module","Surface element","Temperature sensor","Thermostat","Vent fan"],
+      "Refrigerator":["Auger motor","Compressor","Condenser fan motor","Control board","Defrost heater","Defrost thermostat","Door gasket","Evaporator fan motor","Ice maker","Inlet valve","Main control board","Start relay","Temperature sensor","Water filter","Water inlet valve"],
+      "Dishwasher":["Circulation pump","Control board","Door latch","Door seal","Drain hose","Drain pump","Heating element","Inlet valve","Float switch","Rack","Spray arm","Turbidity sensor","Wash motor"]
+    };
+    let search={};
+    const form=document.getElementById('lookupForm');
+    const results=document.getElementById('results');
+    const partList=document.getElementById('partList');
+    function makeSearsUrl(part){
+      const query=[search.brand,search.model,part].filter(Boolean).join(' ');
+      return `https://www.searspartsdirect.com/search?q=${encodeURIComponent(query)}`;
+    }
+    form.addEventListener('submit',event=>{
       event.preventDefault();
-      const brand = document.getElementById('brand').value.trim();
-      const model = document.getElementById('model').value.trim().toUpperCase();
-      const query = [brand, model].filter(Boolean).join(' ');
-      window.open(`https://www.searspartsdirect.com/search?q=${encodeURIComponent(query)}&tab=model`, '_blank');
+      search={appliance:document.getElementById('appliance').value,brand:document.getElementById('brand').value.trim(),model:document.getElementById('model').value.trim().toUpperCase()};
+      document.getElementById('resultTitle').textContent=`${search.brand} ${search.appliance} · ${search.model}`;
+      const names=[...new Set(directories[search.appliance]||[])].sort((a,b)=>a.localeCompare(b));
+      partList.replaceChildren(...names.map(name=>{
+        const row=document.createElement('div');row.className='part-row';
+        const label=document.createElement('span');label.className='part-name';label.textContent=name;
+        const link=document.createElement('a');link.href=makeSearsUrl(name);link.target='_blank';link.rel='noopener';link.textContent='Search ↗';link.setAttribute('aria-label',`Search Sears PartsDirect for ${name}`);
+        row.append(label,link);return row;
+      }));
+      document.getElementById('openModel').href=makeSearsUrl('');
+      results.hidden=false;
+      results.scrollIntoView({behavior:'smooth',block:'start'});
     });
   </script>
 </body>

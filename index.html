@@ -54,17 +54,16 @@
         </div>
       </div>
       <button type="submit">Search Sears PartsDirect&nbsp; ↗</button>
-      <p class="help">Opens a model-specific Sears PartsDirect search in a new tab.</p>
+      <p class="help">Opens Sears model results. Select the exact model to view its parts list.</p>
     </form>
   </main>
   <script>
     document.getElementById('lookupForm').addEventListener('submit', event => {
       event.preventDefault();
-      const appliance = document.getElementById('appliance').value;
       const brand = document.getElementById('brand').value.trim();
       const model = document.getElementById('model').value.trim().toUpperCase();
-      const query = `site:searspartsdirect.com/model ${brand} ${appliance} ${model}`;
-      window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+      const query = [brand, model].filter(Boolean).join(' ');
+      window.open(`https://www.searspartsdirect.com/search?q=${encodeURIComponent(query)}&tab=model`, '_blank');
     });
   </script>
 </body>
